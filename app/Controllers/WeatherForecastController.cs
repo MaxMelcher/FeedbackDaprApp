@@ -45,8 +45,6 @@ namespace app.Controllers
                 })
                .ToArray();
 
-                var healthy = await client.CheckHealthAsync();
-
                 await client.SaveStateAsync(storeName, stateKeyName, weathers);
                 Console.WriteLine("Saved State!");
             }
