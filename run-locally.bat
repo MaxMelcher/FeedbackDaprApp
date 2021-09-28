@@ -1,0 +1,1 @@
+dapr run --app-id myapp4 --app-port 5002 -- dotnet run
