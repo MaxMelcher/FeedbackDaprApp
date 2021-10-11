@@ -46,7 +46,7 @@ namespace app.Controllers
                .ToArray();
 
                 await client.SaveStateAsync(storeName, stateKeyName, weathers);
-                Console.WriteLine("Saved State!");
+                Console.WriteLine("Saved State!"); // WE ARE AWESOME
             }
             return weathers;
         }

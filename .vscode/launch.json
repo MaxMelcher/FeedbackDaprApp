@@ -10,19 +10,38 @@
             "request": "launch",
             "preLaunchTask": "build",
             "program": "${workspaceFolder}/app/bin/Debug/net5.0/app.dll",
-            "args": [],
+            "args": [
+                "--urls",
+                "http://*:5000"
+            ],
             "cwd": "${workspaceFolder}/app",
             "stopAtEntry": false,
-            "serverReadyAction": {
-                "action": "openExternally",
-                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
-            },
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },
             "sourceFileMap": {
                 "/Views": "${workspaceFolder}/Views"
             }
+        },
+        {
+            "name": ".NET Core Launch (web) with Dapr",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "daprd-debug",
+            "program": "${workspaceFolder}/app/bin/Debug/net5.0/app.dll",
+            "args": [
+                "--urls",
+                "http://*:5000"
+            ],
+            "cwd": "${workspaceFolder}/app",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/Views"
+            },
+            "postDebugTask": "daprd-down"
         }
     ]
 }
