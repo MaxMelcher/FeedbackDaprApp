@@ -31,9 +31,16 @@ namespace app.Controllers
                         .Build();
 
             var storeName = "statestore";
-            var stateKeyName = "stateKeyName";
+            var stateKeyName = Guid.NewGuid().ToString();
+            var sessionName = $"session-{feedback.SessionId}";
 
-            await client.SaveStateAsync(storeName, stateKeyName, feedback);
+            Dictionary<string, string> metadata = new Dictionary<string, string>();
+            metadata.Add("partitionKey", sessionName);
+
+            await client.SaveStateAsync(storeName, stateKeyName, feedback, null, metadata);
+
+            var sessions = await client.GetStateAsync<Feedback[]>(storeName, null, null, metadata);
+
             Console.WriteLine("Saved State!"); // WE ARE AWESOME
         }
 
