@@ -9,6 +9,8 @@ namespace app.Controllers
         }
 
         public int SessionId { get; set; }
-        public FeedbackValue Value { get; set; }
+        public int Choice { get; set; }
+
+        public string test {get; set;} = "test";
     }
 }

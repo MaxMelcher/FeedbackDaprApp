@@ -5,9 +5,18 @@ using System.Threading.Tasks;
 using Dapr.Client;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Net.Http;
+using System.Text;
 
 namespace app.Controllers
 {
+
+    public class Widget
+    {
+        public string Size { get; set; }
+        public string Color { get; set; }
+    }
+
     [ApiController]
     [Route("api/weatherforecast")]
     public class WeatherForecastController : ControllerBase
@@ -34,44 +43,28 @@ namespace app.Controllers
             var stateKeyName = Guid.NewGuid().ToString();
             var sessionName = $"session-{feedback.SessionId}";
 
-            Dictionary<string, string> metadata = new Dictionary<string, string>();
-            metadata.Add("partitionKey", sessionName);
-
-            await client.SaveStateAsync(storeName, stateKeyName, feedback, null, metadata);
-
-            var sessions = await client.GetStateAsync<Feedback[]>(storeName, null, null, metadata);
-
-            Console.WriteLine("Saved State!"); // WE ARE AWESOME
+            await client.SaveStateAsync(storeName, stateKeyName, feedback);
+            var state = new Widget() { Size = "small", Color = "yellow", };
+            await client.SaveStateAsync(storeName, stateKeyName, state);
+            Console.WriteLine("Saved State!"); // WE ARE DAPR!
         }
 
-        /*
-                [HttpGet]
-                public async Task<IEnumerable<WeatherForecast>> Get()
-                {
-                    var client = new DaprClientBuilder()
-                    .Build();
+        [HttpGet("GetFeedback")]
+        public async Task<HttpResponseMessage> Get(int sessionId)
+        {
+            var client = new DaprClientBuilder()
+            .Build();
 
-                    var storeName = "statestore";
-                    var stateKeyName = "stateKeyName";
-                    var weathers = await client.GetStateAsync<WeatherForecast[]>(storeName, stateKeyName);
+            var http = new HttpClient();
+            //curl -s -X POST -H "Content-Type: application/json" -d @query-api-examples/query1.json http://localhost:3500/v1.0-alpha1/state/statestore/query
 
-                    if (weathers == null || weathers.Length == 0)
-                    {
-                        var rng = new Random();
-                        weathers = Enumerable.Range(1, 5).Select(index => new WeatherForecast
-                        {
-                            Date = DateTime.Now.AddDays(index),
-                            TemperatureC = rng.Next(-20, 55),
-                            Summary = Summaries[rng.Next(Summaries.Length)]
-                        })
-                       .ToArray();
+            var storeName = "statestore";
+            var query = "{'query': { 'filter': {'EQ': { 'value.SessionId': '1' }}}}";
+            //make a get query and format the result as json
+            var data = await http.PostAsync($"http://localhost:3500/v1.0-alpha1/state/{storeName}/query", new StringContent(query, Encoding.UTF8, "application/json"));
 
-                        await client.SaveStateAsync(storeName, stateKeyName, weathers);
-                        Console.WriteLine("Saved State!"); // WE ARE AWESOME
-                    }
-                    return weathers;
-                }
-                */
+            return data;
+        }
     }
 
 }

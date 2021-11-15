@@ -1,0 +1,13 @@
+{
+    "query": {
+        "filter": {
+            "EQ": { "value.state": "OR" }
+        },
+        "sort": [
+            {
+                "key": "value.person.id",
+                "order": "DESC"
+            }
+        ]
+    }
+}

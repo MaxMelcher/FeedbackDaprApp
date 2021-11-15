@@ -44,10 +44,10 @@ export class HomeComponent {
 
 export class Feedback {
   public SessionId: number;
-  public FeedbackValue: number;
+  public Choice: number;
 
   constructor(sessionId: number, feedbackValue: number) {
-    this.FeedbackValue = feedbackValue;
+    this.Choice = feedbackValue;
     this.SessionId = sessionId;
   }
 }
