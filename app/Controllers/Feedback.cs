@@ -8,8 +8,8 @@ namespace app.Controllers
             good = 2
         }
 
-        public int SessionId { get; set; }
-        public int Choice { get; set; }
+        public string SessionId { get; set; }
+        public string Choice { get; set; }
 
         public string test {get; set;} = "test";
     }

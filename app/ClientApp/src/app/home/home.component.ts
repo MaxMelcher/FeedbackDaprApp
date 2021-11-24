@@ -13,7 +13,7 @@ export class HomeComponent {
 
   }
 
-  submitFeedback(sessionId: number, value: number) {
+  submitFeedback(sessionId: string, value: string) {
 
     console.log("sessionId", sessionId);
     console.log("value", value);
@@ -43,10 +43,10 @@ export class HomeComponent {
 }
 
 export class Feedback {
-  public SessionId: number;
-  public Choice: number;
+  public SessionId: string;
+  public Choice: string;
 
-  constructor(sessionId: number, feedbackValue: number) {
+  constructor(sessionId: string, feedbackValue: string) {
     this.Choice = feedbackValue;
     this.SessionId = sessionId;
   }

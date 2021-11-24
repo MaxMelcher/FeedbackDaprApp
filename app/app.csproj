@@ -13,8 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AspNetCore.RouteAnalyzer" Version="0.5.3" />
-    <PackageReference Include="Dapr.Client" Version="1.5.0" />
+    <ProjectReference Include="D:\Git\daprdotnet\src\Dapr.Client\Dapr.Client.csproj" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="5.0.12" />
   </ItemGroup>
 

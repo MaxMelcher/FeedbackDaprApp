@@ -1,7 +1,7 @@
 {
     "query": {
         "filter": {
-            "EQ": { "value.test": "test" }
+            "EQ": { "value.sessionId": "2" }
         }
     }
 }
