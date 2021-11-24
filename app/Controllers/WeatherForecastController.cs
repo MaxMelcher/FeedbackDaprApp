@@ -17,6 +17,12 @@ namespace app.Controllers
         public string Color { get; set; }
     }
 
+    public class EqObject
+    {
+        [JsonPropertyName("value.sessionId")]
+        public string SessionId { get; set; }
+    }
+
     [ApiController]
     [Route("api/weatherforecast")]
     public class WeatherForecastController : ControllerBase
@@ -31,25 +37,11 @@ namespace app.Controllers
         [HttpPost("SubmitFeedback")]
         public async Task SubmitFeedback([FromBody] Feedback feedback)
         {
-            var client = new DaprClientBuilder()
-                        .Build();
-
-
-
-            var f = new Feedback()
-            {
-
-                Choice = "2",
-                SessionId = "2",
-                test = "test 123"
-
-
-            };
             var wrapper = new[]
             {
                 new {
-                key = "123456",
-                value = f
+                    key = Guid.NewGuid().ToString(),
+                    value = feedback
                 }
             };
 
@@ -61,12 +53,8 @@ namespace app.Controllers
             var json = JsonSerializer.Serialize(wrapper, options);
 
             var storeName = "statestore";
-            var stateKeyName = Guid.NewGuid().ToString();
-            var sessionName = $"session-{feedback.SessionId}";
 
-            //await client.SaveStateAsync(storeName, stateKeyName, feedback);
             var http = new HttpClient();
-            //json = "[{ \"key\": \"key1\", \"value\": { \"person\": { \"org\": \"Dev Ops\", \"id\": 1036}}]";
             var data = await http.PostAsync($"http://localhost:3500/v1.0/state/{storeName}", new StringContent(json, Encoding.UTF8, "application/json"));
 
             if (!data.IsSuccessStatusCode)
@@ -78,20 +66,30 @@ namespace app.Controllers
         }
 
         [HttpGet("GetFeedback")]
-        public async Task<HttpResponseMessage> Get(int sessionId)
+        public async Task<string> Get(string sessionId)
         {
-            var client = new DaprClientBuilder()
-            .Build();
-
             var http = new HttpClient();
             //curl -s -X POST -H "Content-Type: application/json" -d @query-api-examples/query1.json http://localhost:3500/v1.0-alpha1/state/statestore/query
 
             var storeName = "statestore";
-            var query = "{'query': { 'filter': {'EQ': { 'value.SessionId': '1' }}}}";
-            //make a get query and format the result as json
-            var data = await http.PostAsync($"http://localhost:3500/v1.0-alpha1/state/{storeName}/query", new StringContent(query, Encoding.UTF8, "application/json"));
+            var query = new
+            {
+                query = new
+                {
+                    filter = new
+                    {
+                        EQ = new EqObject { SessionId = sessionId }
+                    }
+                }
+            };
 
-            return data;
+            var json = JsonSerializer.Serialize(query);
+
+            //make a get query and format the result as json
+            var data = await http.PostAsync($"http://localhost:3500/v1.0-alpha1/state/{storeName}/query",
+             new StringContent(json, Encoding.UTF8, "application/json"));
+
+            return await data.Content.ReadAsStringAsync();
         }
     }
 
