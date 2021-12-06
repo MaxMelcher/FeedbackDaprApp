@@ -1,27 +1,14 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Dapr.Client;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
-using System.Text.Json.Serialization;
+using app.Models;
 
 namespace app.Controllers
 {
-
-    public class Widget
-    {
-        public string Size { get; set; }
-        public string Color { get; set; }
-    }
-
-    public class EqObject
-    {
-        [JsonPropertyName("value.sessionId")]
-        public string SessionId { get; set; }
-    }
 
     [ApiController]
     [Route("api/weatherforecast")]

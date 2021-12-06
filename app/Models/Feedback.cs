@@ -1,4 +1,4 @@
-namespace app.Controllers
+namespace app.Models
 {
     public class Feedback
     {
@@ -9,8 +9,7 @@ namespace app.Controllers
         }
 
         public string SessionId { get; set; }
-        public string Choice { get; set; }
+        public FeedbackValue Choice { get; set; }
 
-        public string test {get; set;} = "test";
     }
 }
