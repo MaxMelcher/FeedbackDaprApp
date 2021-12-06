@@ -11,12 +11,12 @@ namespace app.Controllers
 {
 
     [ApiController]
-    [Route("api/weatherforecast")]
-    public class WeatherForecastController : ControllerBase
+    [Route("api/feedback")]
+    public class FeedbackController : ControllerBase
     {
-        private readonly ILogger<WeatherForecastController> _logger;
+        private readonly ILogger<SessionController> _logger;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public FeedbackController(ILogger<SessionController> logger)
         {
             _logger = logger;
         }
@@ -52,7 +52,7 @@ namespace app.Controllers
             Console.WriteLine("Saved State!");
         }
 
-        [HttpGet("GetFeedback")]
+        [HttpGet("List")]
         public async Task<string> Get(string sessionId)
         {
             var http = new HttpClient();

@@ -58,7 +58,7 @@ export class HomeComponent {
     console.log("value", value);
     let feedback = new Feedback(sessionId, value);
 
-    this.http.post('/api/weatherforecast/submitFeedback', feedback)
+    this.http.post('/api/feedback/submitFeedback', feedback)
       .pipe(
         catchError(this.handleError)
       ).subscribe();
